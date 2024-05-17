@@ -12,6 +12,7 @@ abstract class IFeatureManager {
   final List<IFeatureDataSource> dataSources;
   final FeatureManagerConfig config;
   final Map<String, Map<String, Feature<String>>> features;
+
   IFeatureManager({
     required this.dataSources,
     required this.config,
@@ -20,7 +21,9 @@ abstract class IFeatureManager {
 
   Future<void> initialize();
 
-  Feature<T>? getFeature<T>(String key);
+  Feature<T>? tryToGetFeature<T>(String key);
+
+  Feature<T> getFeature<T>(String key, {required T defaultValue});
 
   String get appVersion;
 

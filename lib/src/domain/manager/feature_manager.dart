@@ -19,7 +19,7 @@ class FeatureManager extends IFeatureManager {
         );
 
   @override
-  Feature<T>? getFeature<T>(String key) {
+  Feature<T>? tryToGetFeature<T>(String key) {
     try {
       Feature<String>? feature;
       for (final source in dataSources) {
@@ -33,6 +33,12 @@ class FeatureManager extends IFeatureManager {
       // TODO: log error
       return null;
     }
+  }
+
+  @override
+  Feature<T> getFeature<T>(String key, {required T defaultValue}) {
+    final feature = tryToGetFeature<T>(key);
+    return feature ?? Feature(key: key, value: defaultValue);
   }
 
   T _parseValue<T>(Feature<String> feature) {

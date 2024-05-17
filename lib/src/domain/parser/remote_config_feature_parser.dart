@@ -20,6 +20,7 @@ class FirebaseRemoteConfigFeatureParser
           maxVersionKey: maxVersionKey,
           descriptionKey: descriptionKey,
         );
+
   @override
   Feature<String> parse(String key, RemoteConfigValue data) {
     final jsonMap = _valueToJson(data);

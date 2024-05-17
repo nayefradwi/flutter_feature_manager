@@ -6,11 +6,13 @@ class JsonFeatureParser implements IFeatureParser<Map<String, dynamic>> {
   final String? minVersionKey;
   final String? maxVersionKey;
   final String? descriptionKey;
+  final String? requiresRestartKey;
   JsonFeatureParser({
     required this.valueKey,
     this.minVersionKey,
     this.maxVersionKey,
     this.descriptionKey,
+    this.requiresRestartKey,
   });
 
   @override
@@ -21,12 +23,14 @@ class JsonFeatureParser implements IFeatureParser<Map<String, dynamic>> {
     final minVersion = data[minVersionKey ?? ''] as String?;
     final maxVersion = data[maxVersionKey ?? ''] as String?;
     final description = data[descriptionKey ?? ''] as String?;
+    final requiresRestart = data[requiresRestartKey ?? ''] as bool? ?? false;
     return Feature(
       key: key,
       value: value,
       minVersion: minVersion,
       maxVersion: maxVersion,
       description: description,
+      requiresRestart: requiresRestart,
     );
   }
 
@@ -35,6 +39,9 @@ class JsonFeatureParser implements IFeatureParser<Map<String, dynamic>> {
     if (minVersionKey != null) json[minVersionKey!] = feature.minVersion;
     if (maxVersionKey != null) json[maxVersionKey!] = feature.maxVersion;
     if (descriptionKey != null) json[descriptionKey!] = feature.description;
+    if (requiresRestartKey != null) {
+      json[requiresRestartKey!] = feature.requiresRestart;
+    }
     return json;
   }
 }
