@@ -1,7 +1,7 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_feature_manager/src/domain/data_source/data_source.dart';
 import 'package:flutter_feature_manager/src/domain/feature.dart';
-import 'package:flutter_feature_manager/src/domain/feature_parser.dart';
+import 'package:flutter_feature_manager/src/domain/parser/remote_config_feature_parser.dart';
 
 class FirebaseRemoteConfigDataSource implements IFeatureDataSource {
   final FirebaseRemoteConfig remoteConfig;

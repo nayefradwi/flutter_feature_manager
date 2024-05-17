@@ -2,38 +2,8 @@ import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_feature_manager/src/domain/feature.dart';
-
-mixin IFeatureParser<T> {
-  Feature<String> parse(String key, T data);
-}
-
-class JsonFeatureParser implements IFeatureParser<Map<String, dynamic>> {
-  final String valueKey;
-  final String? minVersionKey;
-  final String? maxVersionKey;
-  final String? descriptionKey;
-  JsonFeatureParser({
-    required this.valueKey,
-    this.minVersionKey,
-    this.maxVersionKey,
-    this.descriptionKey,
-  });
-
-  @override
-  Feature<String> parse(String key, Map<String, dynamic> data) {
-    final value = data[valueKey] as String? ?? '';
-    final minVersion = data[minVersionKey ?? ''] as String?;
-    final maxVersion = data[maxVersionKey ?? ''] as String?;
-    final description = data[descriptionKey ?? ''] as String?;
-    return Feature(
-      key: key,
-      value: value,
-      minVersion: minVersion,
-      maxVersion: maxVersion,
-      description: description,
-    );
-  }
-}
+import 'package:flutter_feature_manager/src/domain/parser/feature_parser.dart';
+import 'package:flutter_feature_manager/src/domain/parser/json_feature_parser.dart';
 
 class FirebaseRemoteConfigFeatureParser
     implements IFeatureParser<RemoteConfigValue> {

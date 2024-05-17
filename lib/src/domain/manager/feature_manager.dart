@@ -30,7 +30,7 @@ class FeatureManager extends IFeatureManager {
       final value = _parseValue<T>(feature);
       return feature.withValue<T>(value);
     } catch (e) {
-      // log error
+      // TODO: log error
       return null;
     }
   }
@@ -60,9 +60,13 @@ class FeatureManager extends IFeatureManager {
 
   @override
   Future<void> saveFeatureOverride<T>(Feature<T> feature) async {
-    final overrideDataSource = dataSources.first as IOverrideDataSource;
-    final override = feature.withValue<String>(feature.value.toString());
-    features[overrideDataSource.key]?[feature.key] = override;
-    unawaited(overrideDataSource.overrideFeature(override));
+    try {
+      final overrideDataSource = dataSources.first as IOverrideDataSource;
+      final override = feature.withValue<String>(feature.value.toString());
+      features[overrideDataSource.key]?[feature.key] = override;
+      await overrideDataSource.overrideFeature(override);
+    } catch (e) {
+      // TODO: log error
+    }
   }
 }
