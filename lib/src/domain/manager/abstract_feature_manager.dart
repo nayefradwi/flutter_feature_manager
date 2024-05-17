@@ -36,7 +36,7 @@ abstract class IFeatureManager {
 
   Future<void> overrideFeature<T>(Feature<T> feature) async {
     if (!config.isOverrideEnabled) return;
-    if (feature.requiresRestart ?? false) restartApp?.call();
+    if (feature.requiresRestart) restartApp?.call();
     final previous = tryToGetFeature<T>(feature.key);
     notifyFeatureListeners(previous: previous, current: feature);
     return saveFeatureOverride(feature);

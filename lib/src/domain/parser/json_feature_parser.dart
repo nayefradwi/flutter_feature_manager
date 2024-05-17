@@ -24,6 +24,8 @@ class JsonFeatureParser implements IFeatureParser<Map<String, dynamic>> {
   @override
   Feature<String> parse(String key, dynamic data) {
     if (data is String) return Feature(key: key, value: data);
+    if (data is num) return Feature(key: key, value: data.toString());
+    if (data is bool) return Feature(key: key, value: data.toString());
     if (data is! Map<String, dynamic>) return Feature(key: key, value: '');
     final value = data[valueKey] as String? ?? '';
     final minVersion = data[minVersionKey] as String?;

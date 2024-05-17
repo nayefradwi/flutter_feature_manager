@@ -6,7 +6,7 @@ class Feature<T> {
   final String? minVersion;
   final String? maxVersion;
   final String? description;
-  final bool? requiresRestart;
+  final bool requiresRestart;
 
   Feature({
     required this.value,
@@ -14,7 +14,7 @@ class Feature<T> {
     this.description,
     this.minVersion,
     this.maxVersion,
-    this.requiresRestart,
+    this.requiresRestart = false,
   });
 
   static Feature<String> empty(String key) => Feature(value: '', key: key);
