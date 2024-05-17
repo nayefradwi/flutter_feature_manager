@@ -82,9 +82,7 @@ class FeatureManager extends IFeatureManager {
       final remoteDataSource = dataSources.elementAt(1) as IRemoteDataSource;
       final cacheDataSource = dataSources.elementAt(2) as ICacheDataSource;
       final remoteFeatures = features[remoteDataSource.key];
-      if (!cacheDataSource.isExpired() || (remoteFeatures?.isEmpty ?? true)) {
-        return;
-      }
+      if (remoteFeatures?.isEmpty ?? true) return;
       features[cacheDataSource.key] = remoteFeatures!;
       await cacheDataSource.cacheFeatures(remoteFeatures);
     } catch (e, stack) {
