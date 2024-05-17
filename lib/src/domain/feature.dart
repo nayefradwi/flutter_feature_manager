@@ -1,16 +1,17 @@
-// TODO: should be a regular class?
-abstract class AbstractFeature<T> {
+class Feature<T> {
   final T value;
   final String key;
   final String? minVersion;
   final String? maxVersion;
   final String? description;
+  final bool? requiresRestart;
 
-  AbstractFeature({
+  Feature({
     required this.value,
     required this.key,
     this.description,
     this.minVersion,
     this.maxVersion,
+    this.requiresRestart,
   });
 }

@@ -1,3 +1,4 @@
 abstract class AbstractFeatureManagerConfig {
-  // Should have timeout
+  // Should have load timeout
+  // Should have cache expiry
 }

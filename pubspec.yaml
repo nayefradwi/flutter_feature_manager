@@ -8,6 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  firebase_remote_config: ^4.4.5
   flutter:
     sdk: flutter
 
