@@ -7,7 +7,7 @@ class FeatureManagerConfig {
   FeatureManagerConfig({
     this.loadTimeout,
     this.cacheExpiry,
-    this.isOverrideEnabled = false,
+    this.isOverrideEnabled = true,
     this.isCacheEnabled = true,
   });
 }

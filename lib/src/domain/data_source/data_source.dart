@@ -10,3 +10,11 @@ mixin IFeatureDataSource {
   Future<void> initialize() async {}
   FutureOr<Map<String, Feature<String>>> loadFeatures();
 }
+
+mixin IOverrideDataSource on IFeatureDataSource {
+  Future<void> overrideFeature<T>(Feature<T> feature);
+}
+
+mixin ICacheDataSource on IFeatureDataSource {
+  Future<void> cacheFeature<T>(Feature<T> feature);
+}
