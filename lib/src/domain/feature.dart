@@ -14,4 +14,18 @@ class Feature<T> {
     this.maxVersion,
     this.requiresRestart,
   });
+
+  static Feature<String> empty(String key) => Feature(value: '', key: key);
+
+  Feature<S> withValue<S>(S value) {
+    return Feature<S>(
+      value: value,
+      key: key,
+      description: description,
+      minVersion: minVersion,
+      maxVersion: maxVersion,
+      requiresRestart: requiresRestart,
+    );
+  }
+  // TODO: implement compare versions
 }

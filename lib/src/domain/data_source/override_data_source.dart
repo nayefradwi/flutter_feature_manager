@@ -11,8 +11,7 @@ class OverrideDataSource implements IFeatureDataSource {
   }
 
   @override
-  // TODO: implement key
-  String get key => throw UnimplementedError();
+  String get key => 'override';
 
   @override
   FutureOr<Map<String, Feature<String>>> loadFeatures() {

@@ -4,13 +4,15 @@ import 'package:flutter_feature_manager/src/domain/data_source/override_data_sou
 import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/domain/feature_manager_config.dart';
 
+// TODO: load app version
 abstract class IFeatureManager {
+  // TODO: should override be here?
   final List<IFeatureDataSource> dataSources;
-  final AbstractFeatureManagerConfig config;
+  final FeatureManagerConfig config;
   Map<String, Map<String, Feature<String>>> _features = {};
   Future<void> initialize();
   Feature<T> getFeature<T>(String key);
-
+  String get appVersion;
   IFeatureManager({
     required this.dataSources,
     required this.config,
@@ -18,13 +20,15 @@ abstract class IFeatureManager {
 }
 
 class FeatureManager extends IFeatureManager {
+  String _appVersion = '';
   FeatureManager({
     required IFeatureDataSource remoteDataSource,
     required IFeatureDataSource defaultsDataSource,
-    required super.config,
+    FeatureManagerConfig? config,
     IFeatureDataSource? cacheDataSource,
     IFeatureDataSource? overrideDataSource,
   }) : super(
+          config: config ?? FeatureManagerConfig(),
           dataSources: [
             overrideDataSource ?? OverrideDataSource(),
             remoteDataSource,
@@ -35,12 +39,17 @@ class FeatureManager extends IFeatureManager {
 
   @override
   Feature<T> getFeature<T>(String key) {
-    // 1. get override feature
-    // 2. if override null; get remote feature
-    // 3. if remote null; get cache feature
-    // 4. if cache null; get default feature
-    // 5. if default null; return empty feature
-    // TODO: implement getFeature
+    Feature<String>? feature;
+    for (final source in dataSources) {
+      feature = _features[source.key]?[key];
+      if (feature != null) break;
+    }
+    feature ??= Feature.empty(key);
+    final value = _parseValue<T>(feature);
+    return feature.withValue<T>(value);
+  }
+
+  T _parseValue<T>(Feature<String> feature) {
     throw UnimplementedError();
   }
 
@@ -50,4 +59,7 @@ class FeatureManager extends IFeatureManager {
     // 2. loop through all data sources and load features
     // 3. take into consideration config
   }
+
+  @override
+  String get appVersion => _appVersion;
 }
