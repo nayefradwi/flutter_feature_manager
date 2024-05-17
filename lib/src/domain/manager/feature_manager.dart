@@ -5,15 +5,15 @@ class FeatureManager extends IFeatureManager {
   FeatureManager({
     required IFeatureDataSource remoteDataSource,
     required IFeatureDataSource defaultsDataSource,
-    FeatureManagerConfig? config,
+    super.config = const FeatureManagerConfig(),
     CacheDataSource? cacheDataSource,
     IOverrideDataSource? overrideDataSource,
   }) : super(
-          config: config ?? FeatureManagerConfig(),
           dataSources: [
-            overrideDataSource ?? OverrideDataSource(),
+            if (config.isOverrideEnabled)
+              overrideDataSource ?? OverrideDataSource(),
             remoteDataSource,
-            cacheDataSource ?? CacheDataSource(),
+            if (config.isCacheEnabled) cacheDataSource ?? CacheDataSource(),
             defaultsDataSource,
           ],
         );
@@ -55,10 +55,41 @@ class FeatureManager extends IFeatureManager {
   Future<void> initialize() async {
     final packageInfo = await PackageInfo.fromPlatform();
     _appVersion = packageInfo.version;
-    // 1. initialize all data sources
-    // 2. loop through all data sources and load features
-    // 3. take into consideration config
-    // 4. set up app version
+    for (final source in dataSources) {
+      await _initializeSource(source);
+      final features = await source.loadFeatures();
+      this.features[source.key] = features;
+    }
+    unawaited(_cacheRemoteFeatures());
+  }
+
+  Future<void> _cacheRemoteFeatures() async {
+    try {
+      if (!config.isCacheEnabled) return;
+      final remoteDataSource = dataSources.elementAt(1) as IRemoteDataSource;
+      final cacheDataSource = dataSources.elementAt(2) as ICacheDataSource;
+      final remoteFeatures = features[remoteDataSource.key];
+      if (!cacheDataSource.isExpired() || (remoteFeatures?.isEmpty ?? true)) {
+        return;
+      }
+      features[cacheDataSource.key] = remoteFeatures!;
+      await cacheDataSource.cacheFeatures(remoteFeatures);
+    } catch (e, stack) {
+      logger.severe('Failed to cache remote features $e', e, stack);
+    }
+  }
+
+  Future<void> _initializeSource(IFeatureDataSource source) async {
+    try {
+      final initialize = source.initialize();
+      if (config.loadTimeout != null && source is IRemoteDataSource) {
+        await initialize.timeout(config.loadTimeout!, onTimeout: () {});
+      } else {
+        await initialize;
+      }
+    } catch (e, stack) {
+      logger.severe('Failed to initialize source $e', e, stack);
+    }
   }
 
   @override
@@ -69,8 +100,9 @@ class FeatureManager extends IFeatureManager {
     try {
       final overrideDataSource = dataSources.first as IOverrideDataSource;
       final override = feature.withValue<String>(feature.value.toString());
-      features[overrideDataSource.key]?[feature.key] = override;
-      await overrideDataSource.overrideFeature(override);
+      final overriddenFeatures = features[overrideDataSource.key] ?? {};
+      overriddenFeatures[feature.key] = override;
+      await overrideDataSource.overrideFeatures(overriddenFeatures);
     } catch (e, stack) {
       logger.severe('Failed to save feature override $e', e, stack);
     }

@@ -4,7 +4,7 @@ import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/domain/parser/remote_config_feature_parser.dart';
 import 'package:flutter_feature_manager/src/utils.dart/logger.dart';
 
-class FirebaseRemoteConfigDataSource implements IFeatureDataSource {
+class FirebaseRemoteConfigDataSource implements IRemoteDataSource {
   final FirebaseRemoteConfig remoteConfig;
   final FirebaseRemoteConfigFeatureParser _parser;
   final Duration? timeout;

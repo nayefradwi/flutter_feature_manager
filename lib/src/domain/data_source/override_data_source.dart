@@ -46,8 +46,18 @@ class OverrideDataSource implements IOverrideDataSource {
   }
 
   @override
-  Future<void> overrideFeature<T>(Feature<T> feature) {
-    // TODO: implement overrideFeature
-    throw UnimplementedError();
+  Future<void> overrideFeatures(Map<String, Feature<String>> features) async {
+    try {
+      final featuresJson = <String, dynamic>{};
+      for (final entry in features.entries) {
+        final key = entry.key;
+        final value = _jsonParser.toJson(entry.value);
+        featuresJson[key] = value;
+      }
+      final featuresString = jsonEncode(featuresJson);
+      await _preferences?.setString(_overrideFeaturesKey, featuresString);
+    } catch (e, stack) {
+      logger.severe('Failed to override features: $e', e, stack);
+    }
   }
 }

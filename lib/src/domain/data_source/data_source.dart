@@ -11,10 +11,12 @@ mixin IFeatureDataSource {
   FutureOr<Map<String, Feature<String>>> loadFeatures();
 }
 
+mixin IRemoteDataSource on IFeatureDataSource {}
 mixin IOverrideDataSource on IFeatureDataSource {
-  Future<void> overrideFeature<T>(Feature<T> feature);
+  Future<void> overrideFeatures(Map<String, Feature<String>> features);
 }
 
 mixin ICacheDataSource on IFeatureDataSource {
-  Future<void> cacheFeature<T>(Feature<T> feature);
+  Future<void> cacheFeatures(Map<String, Feature<String>> feature);
+  bool isExpired();
 }
