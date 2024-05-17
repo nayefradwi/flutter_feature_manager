@@ -5,7 +5,7 @@ class FeatureManagerConfig {
   final bool isCacheEnabled;
 
   const FeatureManagerConfig({
-    this.loadTimeout,
+    this.loadTimeout = const Duration(seconds: 10),
     this.cacheExpiry = const Duration(days: 1),
     this.isOverrideEnabled = true,
     this.isCacheEnabled = true,

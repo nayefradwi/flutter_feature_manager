@@ -63,10 +63,10 @@ class CacheDataSource implements ICacheDataSource {
   }
 
   @override
-  Future<void> cacheFeatures(Map<String, Feature<String>> feature) async {
+  Future<void> cacheFeatures(Map<String, Feature<String>> features) async {
     try {
       final featuresJson = <String, dynamic>{};
-      for (final entry in feature.entries) {
+      for (final entry in features.entries) {
         final key = entry.key;
         final value = _jsonParser.toJson(entry.value);
         featuresJson[key] = value;

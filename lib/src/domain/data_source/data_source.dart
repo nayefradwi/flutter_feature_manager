@@ -14,6 +14,6 @@ mixin IOverrideDataSource on IFeatureDataSource {
 }
 
 mixin ICacheDataSource on IFeatureDataSource {
-  Future<void> cacheFeatures(Map<String, Feature<String>> feature);
+  Future<void> cacheFeatures(Map<String, Feature<String>> features);
   bool isExpired();
 }
