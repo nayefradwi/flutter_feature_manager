@@ -2,6 +2,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_feature_manager/src/domain/data_source/data_source.dart';
 import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/domain/parser/remote_config_feature_parser.dart';
+import 'package:flutter_feature_manager/src/utils.dart/logger.dart';
 
 class FirebaseRemoteConfigDataSource implements IFeatureDataSource {
   final FirebaseRemoteConfig remoteConfig;
@@ -26,8 +27,12 @@ class FirebaseRemoteConfigDataSource implements IFeatureDataSource {
         ),
       );
       await remoteConfig.fetchAndActivate();
-    } catch (e) {
-      // TODO: log error
+    } catch (e, stack) {
+      logger.severe(
+        'Failed to initialize Firebase Remote Config: $e',
+        e,
+        stack,
+      );
     }
   }
 
@@ -43,7 +48,12 @@ class FirebaseRemoteConfigDataSource implements IFeatureDataSource {
         features[key] = feature;
       }
       return features;
-    } catch (e) {
+    } catch (e, stack) {
+      logger.severe(
+        'Failed to load features from Firebase Remote Config: $e',
+        e,
+        stack,
+      );
       return {};
     }
   }

@@ -29,8 +29,8 @@ class FeatureManager extends IFeatureManager {
       feature ??= Feature.empty(key);
       final value = _parseValue<T>(feature);
       return feature.withValue<T>(value);
-    } catch (e) {
-      // TODO: log error
+    } catch (e, stack) {
+      logger.severe('Failed to get feature $e', e, stack);
       return null;
     }
   }
@@ -71,8 +71,8 @@ class FeatureManager extends IFeatureManager {
       final override = feature.withValue<String>(feature.value.toString());
       features[overrideDataSource.key]?[feature.key] = override;
       await overrideDataSource.overrideFeature(override);
-    } catch (e) {
-      // TODO: log error
+    } catch (e, stack) {
+      logger.severe('Failed to save feature override $e', e, stack);
     }
   }
 }

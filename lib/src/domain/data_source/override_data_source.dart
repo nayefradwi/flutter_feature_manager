@@ -4,12 +4,13 @@ import 'dart:convert';
 import 'package:flutter_feature_manager/src/domain/data_source/data_source.dart';
 import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/domain/parser/json_feature_parser.dart';
+import 'package:flutter_feature_manager/src/utils.dart/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OverrideDataSource implements IOverrideDataSource {
   static const _overrideFeaturesKey = 'override_features';
   SharedPreferences? _preferences;
-  final _jsonParser = JsonFeatureParser(valueKey: 'value');
+  final _jsonParser = JsonFeatureParser();
 
   @override
   Future<void> initialize() async {
@@ -34,8 +35,12 @@ class OverrideDataSource implements IOverrideDataSource {
         features[key] = feature;
       }
       return features;
-    } catch (e) {
-      // TODO: log error
+    } catch (e, stack) {
+      logger.severe(
+        'Failed to load features from SharedPreferences: $e',
+        e,
+        stack,
+      );
       return {};
     }
   }
