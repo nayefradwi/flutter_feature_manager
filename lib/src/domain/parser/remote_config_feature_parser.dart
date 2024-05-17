@@ -4,6 +4,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/domain/parser/feature_parser.dart';
 import 'package:flutter_feature_manager/src/domain/parser/json_feature_parser.dart';
+import 'package:flutter_feature_manager/src/utils.dart/logger.dart';
 
 class FirebaseRemoteConfigFeatureParser
     implements IFeatureParser<RemoteConfigValue> {
@@ -38,6 +39,7 @@ class FirebaseRemoteConfigFeatureParser
       if (jsonMap is! Map<String, dynamic>) return null;
       return jsonMap;
     } catch (e) {
+      logger.severe('Failed to parse Remote Config value to JSON: $e', e);
       return null;
     }
   }
