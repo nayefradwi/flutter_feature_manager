@@ -1,6 +1,7 @@
 // This class should rebuild the widget
 // based on if a feature is enabled or not.
 import 'package:flutter/widgets.dart';
+import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/extensions/context.dart';
 
 class FeatureBuilder<T> extends StatelessWidget {
@@ -20,7 +21,7 @@ class FeatureBuilder<T> extends StatelessWidget {
   }
 }
 
-class FeatureBuilderWithDefault<T> extends StatelessWidget {
+class FeatureBuilderWithDefault<T> extends StatefulWidget {
   final String featureKey;
   final T defaultValue;
   final Widget Function(BuildContext context, T value) builder;
@@ -32,11 +33,47 @@ class FeatureBuilderWithDefault<T> extends StatelessWidget {
   });
 
   @override
+  State<FeatureBuilderWithDefault<T>> createState() =>
+      _FeatureBuilderWithDefaultState<T>();
+}
+
+class _FeatureBuilderWithDefaultState<T>
+    extends State<FeatureBuilderWithDefault<T>> {
+  String get featureKey => widget.featureKey;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.featureManager.addFeatureListener<T>(
+        key: featureKey,
+        listener: _onFeatureChange,
+      );
+    });
+  }
+
+  void _onFeatureChange({
+    required Feature<T>? previous,
+    required Feature<T> current,
+  }) {
+    if (previous?.value != current.value) setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     final manager = context.featureManager;
-    final feature = manager.tryToGetFeature<T>(featureKey);
-    final value = feature?.value ?? defaultValue;
-    return builder(context, value);
+    final feature = manager.tryToGetFeature<T>(widget.featureKey);
+    final value = feature?.value ?? widget.defaultValue;
+    return widget.builder(context, value);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    context.featureManager.removeFeatureListener<T>(
+      key: featureKey,
+      listener: _onFeatureChange,
+    );
   }
 }
 

@@ -1,6 +1,8 @@
 part of 'abstract_feature_manager.dart';
 
 class FeatureManager extends IFeatureManager {
+  final Map<String, List<FeatureListner<dynamic>>> _listeners = {};
+
   String _appVersion = '';
   FeatureManager({
     required IFeatureDataSource remoteDataSource,
@@ -116,6 +118,46 @@ class FeatureManager extends IFeatureManager {
       await overrideDataSource.overrideFeatures(overriddenFeatures);
     } catch (e, stack) {
       logger.severe('Failed to save feature override $e', e, stack);
+    }
+  }
+
+  // @override
+  // void addFeatureListener<T>({
+  //   required String key,
+  //   required FeatureListner listener,
+  // }) {
+  //
+  // }
+
+  @override
+  void notifyFeatureListeners<T>({
+    required Feature<T> current,
+    required Feature<T>? previous,
+  }) {
+    final listeners = _listeners[current.key] ?? [];
+    for (final listener in listeners) {
+      listener(previous: previous, current: current);
+    }
+  }
+
+  @override
+  void addFeatureListener<T>({
+    required String key,
+    required FeatureListner<T> listener,
+  }) {
+    _listeners.putIfAbsent(key, () => []).add(listener as FeatureListner);
+  }
+
+  @override
+  void removeFeatureListener<T>({
+    required String key,
+    required FeatureListner<T> listener,
+  }) {
+    final listeners = _listeners[key];
+    if (listeners == null) return;
+    listeners.remove(listener);
+    if (listeners.isEmpty) {
+      _listeners.remove(key);
     }
   }
 }
