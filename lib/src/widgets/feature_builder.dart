@@ -1,5 +1,3 @@
-// This class should rebuild the widget
-// based on if a feature is enabled or not.
 import 'package:flutter/widgets.dart';
 import 'package:flutter_feature_manager/src/domain/feature.dart';
 import 'package:flutter_feature_manager/src/extensions/context.dart';
