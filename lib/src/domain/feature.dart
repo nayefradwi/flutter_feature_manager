@@ -1,3 +1,5 @@
+import 'package:flutter_feature_manager/src/utils.dart/version.dart';
+
 class Feature<T> {
   final T value;
   final String key;
@@ -27,5 +29,20 @@ class Feature<T> {
       requiresRestart: requiresRestart,
     );
   }
-  // TODO: implement compare versions
+
+  bool _isLowerThanMin(String version) {
+    if (minVersion == null) return false;
+    final bigger = compareVersions(version1: version, version2: minVersion!);
+    return bigger == minVersion;
+  }
+
+  bool _isHigherThanMax(String version) {
+    if (maxVersion == null) return false;
+    final bigger = compareVersions(version1: version, version2: maxVersion!);
+    return bigger == version;
+  }
+
+  bool isVersionEnabled(String version) {
+    return !_isLowerThanMin(version) && !_isHigherThanMax(version);
+  }
 }

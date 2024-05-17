@@ -27,6 +27,9 @@ class FeatureManager extends IFeatureManager {
         if (feature != null) break;
       }
       feature ??= Feature.empty(key);
+      if (!feature.isVersionEnabled(appVersion)) {
+        return feature.withValue(_getDefaultValue());
+      }
       final value = _parseValue<T>(feature);
       return feature.withValue<T>(value);
     } catch (e, stack) {
@@ -47,6 +50,16 @@ class FeatureManager extends IFeatureManager {
       int => int.tryParse(feature.value) as T? ?? 0 as T,
       double => double.tryParse(feature.value) as T? ?? 0.0 as T,
       bool => bool.tryParse(feature.value) as T? ?? false as T,
+      _ => throw Exception('Unsupported type'),
+    };
+  }
+
+  T _getDefaultValue<T>() {
+    return switch (T) {
+      String => '' as T,
+      int => 0 as T,
+      double => 0.0 as T,
+      bool => false as T,
       _ => throw Exception('Unsupported type'),
     };
   }
