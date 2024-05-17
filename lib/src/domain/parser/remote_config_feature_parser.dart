@@ -27,9 +27,7 @@ class FirebaseRemoteConfigFeatureParser
   @override
   Feature<String> parse(String key, RemoteConfigValue data) {
     final jsonMap = _valueToJson(data);
-    if (jsonMap != null) return _jsonFeatureParser.parse(key, jsonMap);
-    final value = data.asString();
-    return Feature(key: key, value: value);
+    return _jsonFeatureParser.parse(key, jsonMap ?? data.asString());
   }
 
   Map<String, dynamic>? _valueToJson(RemoteConfigValue value) {
