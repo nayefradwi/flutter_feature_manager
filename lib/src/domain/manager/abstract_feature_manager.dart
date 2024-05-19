@@ -14,6 +14,28 @@ typedef FeatureListner<T> = void Function({
   required Feature<T> current,
 });
 
+mixin IOverridableFeatureManager {
+  Future<void> overrideFeature<T>(Feature<T> feature);
+  Future<void> saveFeatureOverride<T>(Feature<T> feature);
+}
+
+mixin IFeatureNotifier {
+  void notifyFeatureListeners<T>({
+    required Feature<T>? previous,
+    required Feature<T> current,
+  });
+
+  void addFeatureListener<T>({
+    required String key,
+    required FeatureListner<T> listener,
+  });
+
+  void removeFeatureListener<T>({
+    required String key,
+    required FeatureListner<T> listener,
+  });
+}
+
 abstract class IFeatureManager {
   final List<IFeatureDataSource> dataSources;
   final FeatureManagerConfig config;
@@ -33,29 +55,4 @@ abstract class IFeatureManager {
   Feature<T>? tryToGetFeature<T>(String key);
 
   Feature<T> getFeature<T>(String key, {required T defaultValue});
-
-  Future<void> overrideFeature<T>(Feature<T> feature) async {
-    if (!config.isOverrideEnabled) return;
-    if (feature.requiresRestart) restartApp?.call();
-    final previous = tryToGetFeature<T>(feature.key);
-    notifyFeatureListeners(previous: previous, current: feature);
-    return saveFeatureOverride(feature);
-  }
-
-  Future<void> saveFeatureOverride<T>(Feature<T> feature) async {}
-
-  void notifyFeatureListeners<T>({
-    required Feature<T>? previous,
-    required Feature<T> current,
-  });
-
-  void addFeatureListener<T>({
-    required String key,
-    required FeatureListner<T> listener,
-  });
-
-  void removeFeatureListener<T>({
-    required String key,
-    required FeatureListner<T> listener,
-  });
 }

@@ -1,9 +1,10 @@
 part of 'abstract_feature_manager.dart';
 
-class FeatureManager extends IFeatureManager {
+class FeatureManager extends IFeatureManager
+    with IOverridableFeatureManager, IFeatureNotifier {
   final Map<String, List<FeatureListner<dynamic>>> _listeners = {};
-
   String _appVersion = '';
+
   FeatureManager({
     required IFeatureDataSource remoteDataSource,
     required IFeatureDataSource defaultsDataSource,
@@ -109,27 +110,6 @@ class FeatureManager extends IFeatureManager {
   String get appVersion => _appVersion;
 
   @override
-  Future<void> saveFeatureOverride<T>(Feature<T> feature) async {
-    try {
-      final overrideDataSource = dataSources.first as IOverrideDataSource;
-      final override = feature.withValue<String>(feature.value.toString());
-      final overriddenFeatures = features[overrideDataSource.key] ?? {};
-      overriddenFeatures[feature.key] = override;
-      await overrideDataSource.overrideFeatures(overriddenFeatures);
-    } catch (e, stack) {
-      logger.severe('Failed to save feature override $e', e, stack);
-    }
-  }
-
-  // @override
-  // void addFeatureListener<T>({
-  //   required String key,
-  //   required FeatureListner listener,
-  // }) {
-  //
-  // }
-
-  @override
   void notifyFeatureListeners<T>({
     required Feature<T> current,
     required Feature<T>? previous,
@@ -158,6 +138,28 @@ class FeatureManager extends IFeatureManager {
     listeners.remove(listener);
     if (listeners.isEmpty) {
       _listeners.remove(key);
+    }
+  }
+
+  @override
+  Future<void> overrideFeature<T>(Feature<T> feature) async {
+    if (!config.isOverrideEnabled) return;
+    if (feature.requiresRestart) restartApp?.call();
+    final previous = tryToGetFeature<T>(feature.key);
+    notifyFeatureListeners(previous: previous, current: feature);
+    return saveFeatureOverride(feature);
+  }
+
+  @override
+  Future<void> saveFeatureOverride<T>(Feature<T> feature) async {
+    try {
+      final overrideDataSource = dataSources.first as IOverrideDataSource;
+      final override = feature.withValue<String>(feature.value.toString());
+      final overriddenFeatures = features[overrideDataSource.key] ?? {};
+      overriddenFeatures[feature.key] = override;
+      await overrideDataSource.overrideFeatures(overriddenFeatures);
+    } catch (e, stack) {
+      logger.severe('Failed to save feature override $e', e, stack);
     }
   }
 }
