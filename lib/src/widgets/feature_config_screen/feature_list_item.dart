@@ -4,7 +4,12 @@ import 'package:flutter_feature_manager/src/widgets/feature_config_screen/featur
 
 class FeatureListItem extends StatelessWidget {
   final Feature<dynamic> feature;
-  const FeatureListItem({required this.feature, super.key});
+  final void Function(Feature<dynamic> feature) onChanged;
+  const FeatureListItem({
+    required this.feature,
+    required this.onChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +27,8 @@ class FeatureListItem extends StatelessWidget {
         children: [
           _FeatureKeyTitle(featureKey: feature.key),
           if (feature.description != null)
-            _DescriptionText(
-              description: feature.description!,
-            ),
-          FeatureListItemField(value: feature.value),
+            _DescriptionText(description: feature.description!),
+          _FeatureListItemField(feature: feature, onChanged: onChanged),
           const SizedBox(height: 8),
           Text('Min version: ${feature.minVersion ?? 'None'}'),
           const SizedBox(height: 8),
@@ -34,6 +37,44 @@ class FeatureListItem extends StatelessWidget {
           if (feature.requiresRestart) const _RequiresRestartText(),
         ],
       ),
+    );
+  }
+}
+
+class _FeatureListItemField extends StatefulWidget {
+  const _FeatureListItemField({
+    required this.feature,
+    required this.onChanged,
+  });
+
+  final Feature<dynamic> feature;
+  final void Function(Feature<dynamic> feature) onChanged;
+
+  @override
+  State<_FeatureListItemField> createState() => _FeatureListItemFieldState();
+}
+
+class _FeatureListItemFieldState extends State<_FeatureListItemField> {
+  late Feature<dynamic> feature;
+
+  @override
+  void initState() {
+    feature = widget.feature;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FeatureListItemField(
+      value: feature.value,
+      onChanged: (newValue) {
+        if (!context.isFeatureOverrideEnabled) return;
+        final newFeature = feature.withValue(newValue);
+        widget.onChanged(newFeature);
+        setState(() {
+          feature = newFeature;
+        });
+      },
     );
   }
 }
@@ -54,9 +95,7 @@ class _RequiresRestartText extends StatelessWidget {
 }
 
 class _FeatureKeyTitle extends StatelessWidget {
-  const _FeatureKeyTitle({
-    required this.featureKey,
-  });
+  const _FeatureKeyTitle({required this.featureKey});
 
   final String featureKey;
 

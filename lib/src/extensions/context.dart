@@ -6,4 +6,6 @@ extension FeatureContextExtension on BuildContext {
   IFeatureManager get featureManager => FeatureManagerProvider.of(this).manager;
   IFeatureNotifier? get featureNotifier =>
       FeatureManagerProvider.of(this).notifier;
+
+  bool get isFeatureOverrideEnabled => featureManager.config.isOverrideEnabled;
 }

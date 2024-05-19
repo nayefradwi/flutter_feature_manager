@@ -28,4 +28,6 @@ class FeatureManagerProvider extends InheritedWidget {
     if (provider == null) throw Exception('FeatureManagerProvider not found');
     return provider;
   }
+
+  bool get isOverrideEnabled => manager.config.isOverrideEnabled;
 }
