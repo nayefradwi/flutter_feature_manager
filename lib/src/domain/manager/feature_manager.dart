@@ -31,9 +31,9 @@ class FeatureManager extends IFeatureManager
       }
       feature ??= Feature.empty(key);
       if (!feature.isVersionEnabled(appVersion)) {
-        return feature.withValue(_getDefaultValue());
+        return feature.withValue(feature.getDefaultValue());
       }
-      final value = _parseValue<T>(feature);
+      final value = feature.parseValue<T>();
       return feature.withValue<T>(value);
     } catch (e, stack) {
       logger.severe('Failed to get feature $e', e, stack);
@@ -45,27 +45,6 @@ class FeatureManager extends IFeatureManager
   Feature<T> getFeature<T>(String key, {required T defaultValue}) {
     final feature = tryToGetFeature<T>(key);
     return feature ?? Feature(key: key, value: defaultValue);
-  }
-
-  T _parseValue<T>(Feature<dynamic> feature) {
-    final value = feature.value.toString();
-    return switch (T) {
-      String => value as T,
-      int => int.tryParse(value) as T? ?? 0 as T,
-      double => double.tryParse(value) as T? ?? 0.0 as T,
-      bool => bool.tryParse(value) as T? ?? false as T,
-      _ => throw Exception('Unsupported type'),
-    };
-  }
-
-  T _getDefaultValue<T>() {
-    return switch (T) {
-      String => '' as T,
-      int => 0 as T,
-      double => 0.0 as T,
-      bool => false as T,
-      _ => throw Exception('Unsupported type'),
-    };
   }
 
   @override

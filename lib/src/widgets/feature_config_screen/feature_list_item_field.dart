@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feature_manager/src/domain/feature.dart';
 
 class FeatureListItemField extends StatelessWidget {
   final dynamic value;
@@ -6,7 +7,8 @@ class FeatureListItemField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (value is String) return _StringFeatureField(value as String);
+    final type = Feature.getTypeOfValue(value);
+    if (type == String) return _StringFeatureField(value as String);
     return const SizedBox();
   }
 }
