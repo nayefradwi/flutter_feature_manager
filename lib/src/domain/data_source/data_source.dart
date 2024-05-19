@@ -7,13 +7,13 @@ mixin IFeatureDataSource {
   FutureOr<Map<String, Feature<String>>> loadFeatures();
 }
 
-mixin IRemoteDataSource on IFeatureDataSource {}
+mixin IRemoteDataSource implements IFeatureDataSource {}
 
-mixin IOverrideDataSource on IFeatureDataSource {
+mixin IOverrideDataSource implements IFeatureDataSource {
   Future<void> overrideFeatures(Map<String, Feature<String>> features);
 }
 
-mixin ICacheDataSource on IFeatureDataSource {
+mixin ICacheDataSource implements IFeatureDataSource {
   Future<void> cacheFeatures(Map<String, Feature<String>> features);
   bool isExpired();
 }
