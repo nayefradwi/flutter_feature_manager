@@ -42,7 +42,7 @@ class JsonFeatureParser implements IFeatureParser<Map<String, dynamic>> {
     );
   }
 
-  Map<String, dynamic> toJson(Feature<String> feature) {
+  Map<String, dynamic> toJson(Feature<dynamic> feature) {
     final json = <String, dynamic>{valueKey: feature.value};
     json[minVersionKey] = feature.minVersion;
     json[maxVersionKey] = feature.maxVersion;

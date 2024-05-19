@@ -24,7 +24,7 @@ class FeatureManager extends IFeatureManager
   @override
   Feature<T>? tryToGetFeature<T>(String key) {
     try {
-      Feature<String>? feature;
+      Feature<dynamic>? feature;
       for (final source in dataSources) {
         feature = features[source.key]?[key];
         if (feature != null) break;
@@ -47,12 +47,13 @@ class FeatureManager extends IFeatureManager
     return feature ?? Feature(key: key, value: defaultValue);
   }
 
-  T _parseValue<T>(Feature<String> feature) {
+  T _parseValue<T>(Feature<dynamic> feature) {
+    final value = feature.value.toString();
     return switch (T) {
-      String => feature.value as T,
-      int => int.tryParse(feature.value) as T? ?? 0 as T,
-      double => double.tryParse(feature.value) as T? ?? 0.0 as T,
-      bool => bool.tryParse(feature.value) as T? ?? false as T,
+      String => value as T,
+      int => int.tryParse(value) as T? ?? 0 as T,
+      double => double.tryParse(value) as T? ?? 0.0 as T,
+      bool => bool.tryParse(value) as T? ?? false as T,
       _ => throw Exception('Unsupported type'),
     };
   }

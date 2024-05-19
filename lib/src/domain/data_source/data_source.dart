@@ -10,10 +10,10 @@ mixin IFeatureDataSource {
 mixin IRemoteDataSource implements IFeatureDataSource {}
 
 mixin IOverrideDataSource implements IFeatureDataSource {
-  Future<void> overrideFeatures(Map<String, Feature<String>> features);
+  Future<void> overrideFeatures(Map<String, Feature<dynamic>> features);
 }
 
 mixin ICacheDataSource implements IFeatureDataSource {
-  Future<void> cacheFeatures(Map<String, Feature<String>> features);
+  Future<void> cacheFeatures(Map<String, Feature<dynamic>> features);
   bool isExpired();
 }

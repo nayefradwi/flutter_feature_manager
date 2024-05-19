@@ -39,7 +39,7 @@ mixin IFeatureNotifier {
 abstract class IFeatureManager {
   final List<IFeatureDataSource> dataSources;
   final FeatureManagerConfig config;
-  final Map<String, Map<String, Feature<String>>> features;
+  final Map<String, Map<String, Feature<dynamic>>> features;
   final void Function()? restartApp;
   String get appVersion;
 
@@ -55,4 +55,12 @@ abstract class IFeatureManager {
   Feature<T>? tryToGetFeature<T>(String key);
 
   Feature<T> getFeature<T>(String key, {required T defaultValue});
+
+  List<Feature<dynamic>> getFeatures() {
+    final features = <String, Feature<dynamic>>{};
+    for (final source in dataSources) {
+      features.addAll(this.features[source.key] ?? {});
+    }
+    return features.values.toList();
+  }
 }

@@ -46,7 +46,7 @@ class OverrideDataSource implements IOverrideDataSource {
   }
 
   @override
-  Future<void> overrideFeatures(Map<String, Feature<String>> features) async {
+  Future<void> overrideFeatures(Map<String, Feature<dynamic>> features) async {
     try {
       final featuresJson = <String, dynamic>{};
       for (final entry in features.entries) {
