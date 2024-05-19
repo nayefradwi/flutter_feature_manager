@@ -15,6 +15,7 @@ class _FeatureListViewState extends State<FeatureListView> {
   final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
   IFeatureManager get featureManager => context.featureManager;
   List<Feature<dynamic>> features = [];
+  Map<String, Feature<dynamic>> featuresChanged = {};
 
   @override
   void initState() {
@@ -36,9 +37,37 @@ class _FeatureListViewState extends State<FeatureListView> {
           ),
         ),
         const SizedBox(height: 16),
-        Expanded(child: _FeaturesListView(features)),
+        Expanded(
+          child: _FeaturesListView(
+            features: features,
+            onChanged: _updateChangedFeatures,
+          ),
+        ),
+        if (featuresChanged.isNotEmpty)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: ElevatedButton(
+              onPressed: _saveOverrides,
+              child: const Text('Save changes'),
+            ),
+          ),
       ],
     );
+  }
+
+  void _updateChangedFeatures(Feature<dynamic> feature) {
+    setState(() {
+      featuresChanged[feature.key] = feature;
+    });
+  }
+
+  void _saveOverrides() {
+    if (featureManager is! IOverridableFeatureManager) return;
+    (featureManager as IOverridableFeatureManager)
+        .overrideFeatures(featuresChanged);
+    setState(() {
+      featuresChanged.clear();
+    });
   }
 
   void _loadFeatures() {
@@ -69,7 +98,11 @@ class _FeatureListViewState extends State<FeatureListView> {
 
 class _FeaturesListView extends StatelessWidget {
   final List<Feature<dynamic>> features;
-  const _FeaturesListView(this.features);
+  final void Function(Feature<dynamic> feature) onChanged;
+  const _FeaturesListView({
+    required this.onChanged,
+    required this.features,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -78,10 +111,7 @@ class _FeaturesListView extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final feature = features[index];
-        return FeatureListItem(
-          feature: feature,
-          onChanged: (feature) {},
-        );
+        return FeatureListItem(feature: feature, onChanged: onChanged);
       },
     );
   }

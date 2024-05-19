@@ -4,7 +4,7 @@ import 'package:flutter_feature_manager/src/domain/feature.dart';
 mixin IFeatureDataSource {
   String get key;
   Future<void> initialize() async {}
-  FutureOr<Map<String, Feature<String>>> loadFeatures();
+  FutureOr<Map<String, Feature<dynamic>>> loadFeatures();
 }
 
 mixin IRemoteDataSource implements IFeatureDataSource {}

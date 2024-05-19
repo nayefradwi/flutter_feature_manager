@@ -16,6 +16,7 @@ typedef FeatureListner<T> = void Function({
 
 mixin IOverridableFeatureManager {
   Future<void> overrideFeature<T>(Feature<T> feature);
+  Future<void> overrideFeatures(Map<String, Feature<dynamic>> features);
   Future<void> saveFeatureOverride<T>(Feature<T> feature);
 }
 

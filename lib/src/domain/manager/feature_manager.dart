@@ -142,4 +142,11 @@ class FeatureManager extends IFeatureManager
       logger.severe('Failed to save feature override $e', e, stack);
     }
   }
+
+  @override
+  Future<void> overrideFeatures(Map<String, Feature<void>> features) async {
+    for (final feature in features.values) {
+      await overrideFeature(feature);
+    }
+  }
 }
