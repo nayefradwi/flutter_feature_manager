@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feature_manager/src/widgets/feature_config_screen/features_list_view.dart';
 
 class FeatureConfigScreenBody extends StatelessWidget {
   final String description;
@@ -9,9 +10,9 @@ class FeatureConfigScreenBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
         _DescriptionText(description),
         const SizedBox(height: 8),
+        const Expanded(child: FeatureListView()),
       ],
     );
   }

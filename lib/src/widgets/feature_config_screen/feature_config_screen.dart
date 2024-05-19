@@ -53,7 +53,10 @@ class FeatureConfigScreen extends StatelessWidget {
       ),
       body: FeatureManagerProvider(
         manager: manager,
-        child: FeatureConfigScreenBody(description: description),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: FeatureConfigScreenBody(description: description),
+        ),
       ),
     );
   }
@@ -70,7 +73,7 @@ class _AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: TextStyle(color: Theme.of(context).colorScheme.surface),
+      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
     );
   }
 }
