@@ -20,7 +20,7 @@ class _FeatureBuilderState<T> extends State<FeatureBuilder<T>> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.featureNotifier?.addFeatureListener<T>(
+      context.featureNotifier?.addFeatureListener(
         key: widget.featureKey,
         listener: _onFeatureChange,
       );
@@ -28,8 +28,8 @@ class _FeatureBuilderState<T> extends State<FeatureBuilder<T>> {
   }
 
   void _onFeatureChange({
-    required Feature<T>? previous,
-    required Feature<T> current,
+    required Feature<dynamic>? previous,
+    required Feature<dynamic> current,
   }) {
     if (previous?.value != current.value) setState(() {});
   }
@@ -75,7 +75,7 @@ class _FeatureBuilderWithDefaultState<T>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.featureNotifier?.addFeatureListener<T>(
+      context.featureNotifier?.addFeatureListener(
         key: featureKey,
         listener: _onFeatureChange,
       );
@@ -83,8 +83,8 @@ class _FeatureBuilderWithDefaultState<T>
   }
 
   void _onFeatureChange({
-    required Feature<T>? previous,
-    required Feature<T> current,
+    required Feature<dynamic>? previous,
+    required Feature<dynamic> current,
   }) {
     if (previous?.value != current.value) setState(() {});
   }

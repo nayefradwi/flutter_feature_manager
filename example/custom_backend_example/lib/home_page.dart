@@ -35,6 +35,7 @@ class _Body extends StatelessWidget {
         _TitleFeature(),
         _OpenConfigBtn(),
         _RequiresRestartFeature(),
+        _DarkModeFeature(),
       ],
     );
   }
@@ -79,5 +80,24 @@ class _RequiresRestartFeature extends StatelessWidget {
       defaultValue: '',
     );
     return Text(feature.value);
+  }
+}
+
+class _DarkModeFeature extends StatelessWidget {
+  const _DarkModeFeature();
+
+  @override
+  Widget build(BuildContext context) {
+    return FeatureBuilderWithDefault(
+      featureKey: isDarkModeKey,
+      defaultValue: false,
+      builder: (context, isDarkMode) {
+        return SwitchListTile(
+          title: const Text('Dark Mode'),
+          value: isDarkMode,
+          onChanged: null,
+        );
+      },
+    );
   }
 }

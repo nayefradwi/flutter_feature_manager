@@ -15,20 +15,20 @@ typedef FeatureListner<T> = void Function({
 });
 
 mixin IOverridableFeatureManager {
-  Future<void> overrideFeature<T>(Feature<T> feature);
+  Future<void> overrideFeature(Feature<dynamic> feature);
   Future<void> overrideFeatures(Map<String, Feature<dynamic>> features);
-  Future<void> saveFeatureOverride<T>(Feature<T> feature);
+  Future<void> saveFeatureOverride(Feature<dynamic> feature);
 }
 
 mixin IFeatureNotifier {
-  void notifyFeatureListeners<T>({
-    required Feature<T>? previous,
-    required Feature<T> current,
+  void notifyFeatureListeners({
+    required Feature<dynamic>? previous,
+    required Feature<dynamic> current,
   });
 
-  void addFeatureListener<T>({
+  void addFeatureListener({
     required String key,
-    required FeatureListner<T> listener,
+    required FeatureListner<dynamic> listener,
   });
 
   void removeFeatureListener<T>({

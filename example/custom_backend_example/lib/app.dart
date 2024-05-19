@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Custom Backend Demo',
             themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            darkTheme: ThemeData.dark(useMaterial3: true),
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,

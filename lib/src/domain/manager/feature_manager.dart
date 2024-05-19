@@ -90,9 +90,9 @@ class FeatureManager extends IFeatureManager
   String get appVersion => _appVersion;
 
   @override
-  void notifyFeatureListeners<T>({
-    required Feature<T> current,
-    required Feature<T>? previous,
+  void notifyFeatureListeners({
+    required Feature<dynamic> current,
+    required Feature<dynamic>? previous,
   }) {
     final listeners = _listeners[current.key] ?? [];
     for (final listener in listeners) {
@@ -101,11 +101,11 @@ class FeatureManager extends IFeatureManager
   }
 
   @override
-  void addFeatureListener<T>({
+  void addFeatureListener({
     required String key,
-    required FeatureListner<T> listener,
+    required FeatureListner<dynamic> listener,
   }) {
-    _listeners.putIfAbsent(key, () => []).add(listener as FeatureListner);
+    _listeners.putIfAbsent(key, () => []).add(listener);
   }
 
   @override
@@ -122,16 +122,16 @@ class FeatureManager extends IFeatureManager
   }
 
   @override
-  Future<void> overrideFeature<T>(Feature<T> feature) async {
+  Future<void> overrideFeature(Feature<dynamic> feature) async {
     if (!config.isOverrideEnabled) return;
     if (feature.requiresRestart) restartApp?.call();
-    final previous = tryToGetFeature<T>(feature.key);
+    final previous = tryToGetFeature<dynamic>(feature.key);
     notifyFeatureListeners(previous: previous, current: feature);
     return saveFeatureOverride(feature);
   }
 
   @override
-  Future<void> saveFeatureOverride<T>(Feature<T> feature) async {
+  Future<void> saveFeatureOverride(Feature<dynamic> feature) async {
     try {
       final overrideDataSource = dataSources.first as IOverrideDataSource;
       final override = feature.withValue<String>(feature.value.toString());
