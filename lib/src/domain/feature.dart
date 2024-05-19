@@ -19,13 +19,17 @@ class Feature<T> {
 
   static Feature<String> empty(String key) => Feature(value: '', key: key);
 
-  Feature<S> withValue<S>(S value) {
+  Feature<S> withValue<S>(
+    S value, {
+    String? minVersion,
+    String? maxVersion,
+  }) {
     return Feature<S>(
       value: value,
       key: key,
       description: description,
-      minVersion: minVersion,
-      maxVersion: maxVersion,
+      minVersion: minVersion ?? this.minVersion,
+      maxVersion: maxVersion ?? this.maxVersion,
       requiresRestart: requiresRestart,
     );
   }
