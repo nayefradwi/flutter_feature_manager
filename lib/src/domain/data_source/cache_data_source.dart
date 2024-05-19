@@ -20,7 +20,9 @@ class CacheDataSource implements ICacheDataSource {
   }) : _jsonParser = jsonParser ?? JsonFeatureParser();
 
   @override
-  Future<void> initialize() async {}
+  Future<void> initialize() async {
+    _preferences = await SharedPreferences.getInstance();
+  }
 
   @override
   String get key => 'cache';
