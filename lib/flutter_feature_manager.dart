@@ -12,5 +12,5 @@ export 'src/domain/parser/json_feature_parser.dart';
 export 'src/domain/parser/remote_config_feature_parser.dart';
 export 'src/extensions/context.dart';
 export 'src/widgets/feature_builder.dart';
-export 'src/widgets/feature_config_screen.dart';
+export 'src/widgets/feature_config_screen/feature_config_screen.dart';
 export 'src/widgets/feature_provider.dart';
