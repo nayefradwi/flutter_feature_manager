@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feature_manager/flutter_feature_manager.dart';
 import 'package:flutter_feature_manager/src/widgets/feature_config_screen/debouncer.dart';
+import 'package:flutter_feature_manager/src/widgets/feature_config_screen/feature_list_item.dart';
 
 class FeatureListView extends StatefulWidget {
   const FeatureListView({super.key});
@@ -28,7 +29,12 @@ class _FeatureListViewState extends State<FeatureListView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(onChanged: _debounceSearch),
+        TextField(
+          onChanged: _debounceSearch,
+          decoration: const InputDecoration(
+            labelText: 'Search features',
+          ),
+        ),
         const SizedBox(height: 16),
         Expanded(child: _FeaturesListView(features)),
       ],
@@ -68,11 +74,12 @@ class _FeaturesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: features.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final feature = features[index];
-        return Text(feature.key);
+        return FeatureListItem(feature: feature);
       },
     );
   }
