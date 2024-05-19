@@ -19,26 +19,65 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FeatureBuilder<String>(
-              featureKey: titleFeatureKey,
-              builder: (context, value) {
-                if (value == null) return const SizedBox();
-                return Text(value);
-              },
-            ),
-            TextButton(
-              onPressed: () {
-                openFeatureConfigScreen(context: context);
-              },
-              child: const Text('Open Feature Config Screen'),
-            )
-          ],
-        ),
-      ),
+      body: const Center(child: _Body()),
     );
+  }
+}
+
+class _Body extends StatelessWidget {
+  const _Body();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _TitleFeature(),
+        _OpenConfigBtn(),
+        _RequiresRestartFeature(),
+      ],
+    );
+  }
+}
+
+class _TitleFeature extends StatelessWidget {
+  const _TitleFeature();
+
+  @override
+  Widget build(BuildContext context) {
+    return FeatureBuilder<String>(
+      featureKey: titleFeatureKey,
+      builder: (context, value) {
+        if (value == null) return const SizedBox();
+        return Text(value);
+      },
+    );
+  }
+}
+
+class _OpenConfigBtn extends StatelessWidget {
+  const _OpenConfigBtn();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        openFeatureConfigScreen(context: context);
+      },
+      child: const Text('Open Feature Config Screen'),
+    );
+  }
+}
+
+class _RequiresRestartFeature extends StatelessWidget {
+  const _RequiresRestartFeature();
+
+  @override
+  Widget build(BuildContext context) {
+    final feature = context.featureManager.getFeature<String>(
+      descriptionFeatureKey,
+      defaultValue: '',
+    );
+    return Text(feature.value);
   }
 }

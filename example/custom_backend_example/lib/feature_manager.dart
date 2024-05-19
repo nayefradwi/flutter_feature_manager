@@ -31,6 +31,7 @@ class RemoteDataSource with IRemoteDataSource {
       descriptionFeatureKey: Feature(
         key: descriptionFeatureKey,
         value: 'Custom Remote Description',
+        requiresRestart: true,
       ),
     };
   }
