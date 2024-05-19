@@ -20,7 +20,7 @@ class _FeatureBuilderState<T> extends State<FeatureBuilder<T>> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.featureManager.addFeatureListener<T>(
+      context.featureNotifier?.addFeatureListener<T>(
         key: widget.featureKey,
         listener: _onFeatureChange,
       );
@@ -44,7 +44,7 @@ class _FeatureBuilderState<T> extends State<FeatureBuilder<T>> {
   @override
   void dispose() {
     super.dispose();
-    context.featureManager.removeFeatureListener<T>(
+    context.featureNotifier?.removeFeatureListener<T>(
       key: widget.featureKey,
       listener: _onFeatureChange,
     );
@@ -75,7 +75,7 @@ class _FeatureBuilderWithDefaultState<T>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.featureManager.addFeatureListener<T>(
+      context.featureNotifier?.addFeatureListener<T>(
         key: featureKey,
         listener: _onFeatureChange,
       );
@@ -100,7 +100,7 @@ class _FeatureBuilderWithDefaultState<T>
   @override
   void dispose() {
     super.dispose();
-    context.featureManager.removeFeatureListener<T>(
+    context.featureNotifier?.removeFeatureListener<T>(
       key: featureKey,
       listener: _onFeatureChange,
     );

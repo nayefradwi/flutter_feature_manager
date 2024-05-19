@@ -4,4 +4,6 @@ import 'package:flutter_feature_manager/src/widgets/feature_provider.dart';
 
 extension FeatureContextExtension on BuildContext {
   IFeatureManager get featureManager => FeatureManagerProvider.of(this).manager;
+  IFeatureNotifier? get featureNotifier =>
+      FeatureManagerProvider.of(this).notifier;
 }
