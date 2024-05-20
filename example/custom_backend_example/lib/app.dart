@@ -3,6 +3,8 @@ import 'package:custom_backend_example/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feature_manager/flutter_feature_manager.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   final IFeatureManager featureManager;
   const MyApp({super.key, required this.featureManager});
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget {
         featureKey: isDarkModeKey,
         builder: (context, isDarkMode) {
           return MaterialApp(
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'Custom Backend Demo',
             themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,

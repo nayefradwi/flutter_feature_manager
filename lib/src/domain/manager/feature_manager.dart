@@ -11,6 +11,7 @@ class FeatureManager extends IFeatureManager
     super.config = const FeatureManagerConfig(),
     CacheDataSource? cacheDataSource,
     IOverrideDataSource? overrideDataSource,
+    super.restartApp,
   }) : super(
           dataSources: [
             if (config.isOverrideEnabled)
@@ -131,10 +132,10 @@ class FeatureManager extends IFeatureManager
   @override
   Future<void> overrideFeature(Feature<dynamic> feature) async {
     if (!config.isOverrideEnabled) return;
-    if (feature.requiresRestart) restartApp?.call();
     final previous = tryToGetFeature<dynamic>(feature.key);
     notifyFeatureListeners(previous: previous, current: feature);
-    return saveFeatureOverride(feature);
+    await saveFeatureOverride(feature);
+    if (feature.requiresRestart) restartApp?.call();
   }
 
   @override
