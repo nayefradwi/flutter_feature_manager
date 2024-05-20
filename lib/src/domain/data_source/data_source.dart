@@ -11,6 +11,7 @@ mixin IRemoteDataSource implements IFeatureDataSource {}
 
 mixin IOverrideDataSource implements IFeatureDataSource {
   Future<void> overrideFeatures(Map<String, Feature<dynamic>> features);
+  Future<void> overrideFeature(Feature<dynamic> feature);
 }
 
 mixin ICacheDataSource implements IFeatureDataSource {

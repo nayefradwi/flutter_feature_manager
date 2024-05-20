@@ -80,7 +80,7 @@ class _FeatureListViewState extends State<FeatureListView> {
   void _debounceSearch(String query) {
     if (query.isEmpty) return _loadFeatures();
     debouncer.run(() {
-      final features = featureManager.features.values.expand((e) => e.values);
+      final features = [...featureManager.getFeatures()];
       final filtered = features.where((e) => e.key.contains(query)).toList();
       setState(() {
         this.features = filtered;

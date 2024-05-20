@@ -12,6 +12,8 @@ class OverrideDataSource implements IOverrideDataSource {
   SharedPreferences? _preferences;
   final _jsonParser = JsonFeatureParser();
 
+  Map<String, Feature<dynamic>> _features = {};
+
   @override
   Future<void> initialize() async {
     _preferences = await SharedPreferences.getInstance();
@@ -21,7 +23,7 @@ class OverrideDataSource implements IOverrideDataSource {
   String get key => 'override';
 
   @override
-  FutureOr<Map<String, Feature<String>>> loadFeatures() async {
+  FutureOr<Map<String, Feature<dynamic>>> loadFeatures() async {
     try {
       if (_preferences == null) return {};
       final featuresString = _preferences!.getString(_overrideFeaturesKey);
@@ -34,6 +36,7 @@ class OverrideDataSource implements IOverrideDataSource {
         final feature = _jsonParser.parse(key, value);
         features[key] = feature;
       }
+      _features = features;
       return features;
     } catch (e, stack) {
       logger.severe(
@@ -59,5 +62,11 @@ class OverrideDataSource implements IOverrideDataSource {
     } catch (e, stack) {
       logger.severe('Failed to override features: $e', e, stack);
     }
+  }
+
+  @override
+  Future<void> overrideFeature(Feature<dynamic> feature) {
+    _features[feature.key] = feature as Feature<String>;
+    return overrideFeatures(_features);
   }
 }
