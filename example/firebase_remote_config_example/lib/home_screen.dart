@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Home Screen'),
-            FeatureBuilder(
+            FeatureBuilder<bool>(
               featureKey: 'is_feature_enabled',
               builder: (context, value) {
                 if (value == null) return const SizedBox();
