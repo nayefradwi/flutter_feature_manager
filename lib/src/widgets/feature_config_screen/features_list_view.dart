@@ -71,6 +71,7 @@ class _FeatureListViewState extends State<FeatureListView> {
   }
 
   void _loadFeatures() {
+    debouncer.cancel();
     final features = featureManager.getFeatures();
     setState(() {
       this.features = features;

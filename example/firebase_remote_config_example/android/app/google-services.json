@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "805957180224",
+    "project_id": "feature-manager-demo",
+    "storage_bucket": "feature-manager-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805957180224:android:fa36e061bae0468cc878a5",
+        "android_client_info": {
+          "package_name": "com.example.firebase_remote_config_example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_GTD2mIw_qlobSN01RlGfAQ6XV6tvbM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

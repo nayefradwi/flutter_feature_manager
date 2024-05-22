@@ -23,7 +23,7 @@ class FirebaseRemoteConfigDataSource implements IRemoteDataSource {
       await remoteConfig.setConfigSettings(
         RemoteConfigSettings(
           fetchTimeout: timeout ?? const Duration(seconds: 10),
-          minimumFetchInterval: expiry ?? const Duration(hours: 1),
+          minimumFetchInterval: expiry ?? const Duration(seconds: 10),
         ),
       );
       await remoteConfig.fetchAndActivate();
