@@ -19,6 +19,15 @@ class OveriddableFeatureManager extends FeatureManager
     super.restartApp,
   });
 
+  OveriddableFeatureManager.multipleRemoteSources({
+    required super.defaultsDataSource,
+    required super.remoteDataSources,
+    super.config,
+    super.cacheDataSource,
+    super.overrideDataSource,
+    super.restartApp,
+  }) : super.multipleRemoteSources();
+
   @override
   Future<void> initialize() async {
     await super.initialize();

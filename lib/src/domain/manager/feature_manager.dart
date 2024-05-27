@@ -20,6 +20,23 @@ class FeatureManager extends IFeatureManager {
           ],
         );
 
+  FeatureManager.multipleRemoteSources({
+    required IFeatureDataSource defaultsDataSource,
+    required List<IRemoteDataSource> remoteDataSources,
+    super.config = const FeatureManagerConfig(),
+    CacheDataSource? cacheDataSource,
+    IOverrideDataSource? overrideDataSource,
+    super.restartApp,
+  }) : super(
+          dataSources: [
+            if (config.isOverrideEnabled)
+              overrideDataSource ?? OverrideDataSource(),
+            ...remoteDataSources,
+            if (config.isCacheEnabled) cacheDataSource ?? CacheDataSource(),
+            defaultsDataSource,
+          ],
+        );
+
   @override
   Feature<T>? tryToGetFeature<T>(String key) {
     try {
