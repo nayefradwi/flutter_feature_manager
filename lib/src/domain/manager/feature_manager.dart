@@ -1,12 +1,10 @@
 part of 'abstract_feature_manager.dart';
 
-class FeatureManager extends IFeatureManager
-    with IOverridableFeatureManager, IFeatureNotifier {
-  final Map<String, List<FeatureListner<dynamic>>> _listeners = {};
+class FeatureManager extends IFeatureManager {
   String _appVersion = '';
 
   FeatureManager({
-    required IFeatureDataSource remoteDataSource,
+    required IRemoteDataSource remoteDataSource,
     required IFeatureDataSource defaultsDataSource,
     super.config = const FeatureManagerConfig(),
     CacheDataSource? cacheDataSource,
@@ -62,10 +60,6 @@ class FeatureManager extends IFeatureManager
       }
     }
     unawaited(_cacheRemoteFeatures(remoteFeatures));
-
-    for (final feature in features.values) {
-      notifyFeatureListeners(current: feature, previous: null);
-    }
   }
 
   Future<void> _cacheRemoteFeatures(
@@ -96,64 +90,4 @@ class FeatureManager extends IFeatureManager
 
   @override
   String get appVersion => _appVersion;
-
-  @override
-  void notifyFeatureListeners({
-    required Feature<dynamic> current,
-    required Feature<dynamic>? previous,
-  }) {
-    final listeners = _listeners[current.key] ?? [];
-    for (final listener in listeners) {
-      listener(previous: previous, current: current);
-    }
-  }
-
-  @override
-  void addFeatureListener({
-    required String key,
-    required FeatureListner<dynamic> listener,
-  }) {
-    _listeners.putIfAbsent(key, () => []).add(listener);
-  }
-
-  @override
-  void removeFeatureListener<T>({
-    required String key,
-    required FeatureListner<T> listener,
-  }) {
-    final listeners = _listeners[key];
-    if (listeners == null) return;
-    listeners.remove(listener);
-    if (listeners.isEmpty) {
-      _listeners.remove(key);
-    }
-  }
-
-  @override
-  Future<void> overrideFeature(Feature<dynamic> feature) async {
-    if (!config.isOverrideEnabled) return;
-    final previous = tryToGetFeature<dynamic>(feature.key);
-    notifyFeatureListeners(previous: previous, current: feature);
-    await saveFeatureOverride(feature);
-    if (feature.requiresRestart) restartApp?.call();
-  }
-
-  @override
-  Future<void> saveFeatureOverride(Feature<dynamic> feature) async {
-    try {
-      final overrideDataSource = dataSources.first as IOverrideDataSource;
-      final override = feature.withValue<String>(feature.value.toString());
-      features[feature.key] = override;
-      await overrideDataSource.overrideFeature(override);
-    } catch (e, stack) {
-      logger.severe('Failed to save feature override $e', e, stack);
-    }
-  }
-
-  @override
-  Future<void> overrideFeatures(Map<String, Feature<void>> features) async {
-    for (final feature in features.values) {
-      await overrideFeature(feature);
-    }
-  }
 }
