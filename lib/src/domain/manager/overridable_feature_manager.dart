@@ -6,11 +6,11 @@ import 'package:flutter_feature_manager/src/domain/manager/abstract_feature_mana
 import 'package:flutter_feature_manager/src/domain/manager/feature_manager_config.dart';
 import 'package:flutter_feature_manager/src/utils.dart/logger.dart';
 
-class OveriddableFeatureManager extends FeatureManager
+class OverridableFeatureManager extends FeatureManager
     with IOverridableFeatureManager, IFeatureNotifier {
   final Map<String, List<FeatureListner<dynamic>>> _listeners = {};
 
-  OveriddableFeatureManager({
+  OverridableFeatureManager({
     required super.remoteDataSource,
     required super.defaultsDataSource,
     super.config = const FeatureManagerConfig(),
@@ -19,7 +19,7 @@ class OveriddableFeatureManager extends FeatureManager
     super.restartApp,
   });
 
-  OveriddableFeatureManager.multipleRemoteSources({
+  OverridableFeatureManager.multipleRemoteSources({
     required super.defaultsDataSource,
     required super.remoteDataSources,
     super.config,

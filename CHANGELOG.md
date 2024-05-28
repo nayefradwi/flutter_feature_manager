@@ -11,3 +11,7 @@
 ## 0.1.1
 
 - exporting overridable feature manager
+
+## 0.1.2
+
+- fixing spelling mistakes
