@@ -8,3 +8,6 @@
 - introduced overridable feature manager
 - allowing multiple and single remote data sources (combining firebase and custom backend)
 
+## 0.1.1
+
+- exporting overridable feature manager
