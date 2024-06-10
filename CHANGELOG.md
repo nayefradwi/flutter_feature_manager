@@ -15,3 +15,6 @@
 ## 0.1.2
 
 - fixing spelling mistakes
+
+## 0.1.3
+- fixed issue where defaults data source only takes `Feature<String>`
