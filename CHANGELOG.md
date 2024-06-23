@@ -18,3 +18,6 @@
 
 ## 0.1.3
 - fixed issue where defaults data source only takes `Feature<String>`
+
+## 0.1.4
+- fixing dead context in dispose when removing notifier

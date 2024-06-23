@@ -38,15 +38,16 @@ class _FeatureBuilderState<T> extends State<FeatureBuilder<T>> {
   Widget build(BuildContext context) {
     final manager = context.featureManager;
     final feature = manager.tryToGetFeature<T>(widget.featureKey);
-    return widget.builder(context, feature?.value);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    context.featureNotifier?.removeFeatureListener<T>(
-      key: widget.featureKey,
-      listener: _onFeatureChange,
+    return PopScope(
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          context.featureNotifier?.removeFeatureListener<T>(
+            key: widget.featureKey,
+            listener: _onFeatureChange,
+          );
+        }
+      },
+      child: widget.builder(context, feature?.value),
     );
   }
 }
@@ -94,15 +95,16 @@ class _FeatureBuilderWithDefaultState<T>
     final manager = context.featureManager;
     final feature = manager.tryToGetFeature<T>(widget.featureKey);
     final value = feature?.value ?? widget.defaultValue;
-    return widget.builder(context, value);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    context.featureNotifier?.removeFeatureListener<T>(
-      key: featureKey,
-      listener: _onFeatureChange,
+    return PopScope(
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          context.featureNotifier?.removeFeatureListener<T>(
+            key: featureKey,
+            listener: _onFeatureChange,
+          );
+        }
+      },
+      child: widget.builder(context, value),
     );
   }
 }
