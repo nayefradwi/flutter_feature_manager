@@ -11,6 +11,7 @@ class Feature<T> {
   final String? maxVersion;
   final String? description;
   final bool requiresRestart;
+  final Map<String, dynamic> metadata;
   late final Type type = getTypeOfValue(value);
 
   Feature({
@@ -20,9 +21,16 @@ class Feature<T> {
     this.minVersion,
     this.maxVersion,
     this.requiresRestart = false,
-  });
+    Map<String, dynamic>? metadata,
+  }) : metadata = metadata ?? {};
 
   static Feature<String> empty(String key) => Feature(value: '', key: key);
+
+  void loadMetadata(Map<String, dynamic> metadata) {
+    metadata.forEach((key, value) {
+      this.metadata[key] = value;
+    });
+  }
 
   Feature<S> withValue<S>(
     S value, {

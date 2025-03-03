@@ -16,12 +16,14 @@ class FirebaseRemoteConfigFeatureParser
     String? maxVersionKey,
     String? descriptionKey,
     String? requiresRestartKey,
+    String? metadataKey,
   }) : _jsonFeatureParser = JsonFeatureParser(
           valueKey: valueKey ?? defaultValueKey,
           minVersionKey: minVersionKey ?? defaultMinVersionKey,
           maxVersionKey: maxVersionKey ?? defaultMaxVersionKey,
           descriptionKey: descriptionKey ?? defaultDescriptionKey,
           requiresRestartKey: requiresRestartKey ?? defaultRequiresRestartKey,
+          metadataKey: metadataKey ?? defaultMetadataKey,
         );
 
   @override
