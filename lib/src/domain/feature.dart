@@ -11,6 +11,7 @@ class Feature<T> {
   final String? maxVersion;
   final String? description;
   final bool requiresRestart;
+  final Map<String, dynamic> metadata;
   late final Type type = getTypeOfValue(value);
 
   Feature({
@@ -20,9 +21,16 @@ class Feature<T> {
     this.minVersion,
     this.maxVersion,
     this.requiresRestart = false,
-  });
+    Map<String, dynamic>? metadata,
+  }) : metadata = metadata ?? {};
 
   static Feature<String> empty(String key) => Feature(value: '', key: key);
+
+  void loadMetadata(Map<String, dynamic> metadata) {
+    metadata.forEach((key, value) {
+      this.metadata[key] = value;
+    });
+  }
 
   Feature<S> withValue<S>(
     S value, {
@@ -84,5 +92,25 @@ class Feature<T> {
     final asBool = bool.tryParse(value.toString());
     if (asBool != null) return bool;
     return String;
+  }
+
+  Feature<T> copyWith({
+    T? value,
+    String? key,
+    String? minVersion,
+    String? maxVersion,
+    String? description,
+    bool? requiresRestart,
+    Map<String, dynamic>? metadata,
+  }) {
+    return Feature<T>(
+      value: value ?? this.value,
+      key: key ?? this.key,
+      minVersion: minVersion ?? this.minVersion,
+      maxVersion: maxVersion ?? this.maxVersion,
+      description: description ?? this.description,
+      requiresRestart: requiresRestart ?? this.requiresRestart,
+      metadata: metadata ?? this.metadata,
+    );
   }
 }
