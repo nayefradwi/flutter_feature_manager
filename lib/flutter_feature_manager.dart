@@ -4,6 +4,7 @@ export 'src/domain/data_source/data_source.dart';
 export 'src/domain/data_source/defaults_data_source.dart';
 export 'src/domain/data_source/firebase_remote_config_data_source.dart';
 export 'src/domain/data_source/override_data_source.dart';
+export 'src/domain/data_source/posthog_data_source.dart';
 export 'src/domain/feature.dart';
 export 'src/domain/manager/abstract_feature_manager.dart';
 export 'src/domain/manager/feature_manager_config.dart';
