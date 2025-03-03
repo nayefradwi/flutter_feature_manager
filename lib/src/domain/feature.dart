@@ -93,4 +93,24 @@ class Feature<T> {
     if (asBool != null) return bool;
     return String;
   }
+
+  Feature<T> copyWith({
+    T? value,
+    String? key,
+    String? minVersion,
+    String? maxVersion,
+    String? description,
+    bool? requiresRestart,
+    Map<String, dynamic>? metadata,
+  }) {
+    return Feature<T>(
+      value: value ?? this.value,
+      key: key ?? this.key,
+      minVersion: minVersion ?? this.minVersion,
+      maxVersion: maxVersion ?? this.maxVersion,
+      description: description ?? this.description,
+      requiresRestart: requiresRestart ?? this.requiresRestart,
+      metadata: metadata ?? this.metadata,
+    );
+  }
 }
